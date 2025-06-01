@@ -217,14 +217,7 @@ function Pos() {
       // Make API call to create the order
       const response = await axiosInstance.post("/api/orders", orderDataToSend); // Use axiosInstance
 
-      if (!response.ok) {
-        const errorData = response.data; // Use response.data
-        throw new Error(
-          errorData.message || `HTTP error! status: ${response.status}`
-        );
-      }
-
-      const data = await response.json();
+      const data = response.data;
 
       console.log("Order placed successfully:", data);
 
