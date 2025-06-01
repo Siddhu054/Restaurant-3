@@ -72,12 +72,6 @@ function OrderManagement() {
       const response = await axiosInstance.put(`/api/orders/${orderId}`, {
         status: "served",
       }); // Use axiosInstance
-      const errorData = response.data; // Use response.data
-      if (!response.ok) {
-        throw new Error(
-          errorData.message || `HTTP error! status: ${response.status}`
-        );
-      }
       fetchOrders();
     } catch (err) {
       setError(`Failed to update order status: ${err.message}`);
