@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api/axios"; // Import axiosInstance
 
 function Pos() {
   const navigate = useNavigate();
@@ -50,11 +51,8 @@ function Pos() {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/menu");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const response = await axiosInstance.get("/api/menu"); // Use axiosInstance
+        const data = response.data; // Use response.data with axios
         setMenuItems(data);
       } catch (err) {
         setError(err.message);
@@ -72,11 +70,8 @@ function Pos() {
   const fetchTables = async () => {
     try {
       setLoadingTables(true);
-      const response = await fetch("http://localhost:5000/api/tables");
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+      const response = await axiosInstance.get("/api/tables"); // Use axiosInstance
+      const data = response.data; // Use response.data with axios
       // Filter for available tables if your backend returns status
       // For now, assuming all fetched tables are available to be assigned
       setTables(data);
@@ -220,16 +215,10 @@ function Pos() {
 
     try {
       // Make API call to create the order
-      const response = await fetch("http://localhost:5000/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderDataToSend),
-      });
+      const response = await axiosInstance.post("/api/orders", orderDataToSend); // Use axiosInstance
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = response.data; // Use response.data
         throw new Error(
           errorData.message || `HTTP error! status: ${response.status}`
         );
