@@ -125,16 +125,18 @@ function OrderManagement() {
         `/api/orders/${orderId}/assign-chef`,
         { chefId }
       ); // Use axiosInstance
-      const errorData = response.data; // Use response.data
-      if (!response.ok) {
-        throw new Error(
-          errorData.message || `HTTP error! status: ${response.status}`
-        );
+      // Check for successful status codes (e.g., 200 OK, 204 No Content)
+      if (response.status === 200 || response.status === 204) {
+        // Chef assigned successfully, now fetch updated orders
+        await fetchOrders();
+        // Optionally, add a success notification here if needed, but avoid setting the error state
+      } else {
+        // If backend returns a non-success status, treat it as an error
+        setError(`Failed to assign chef: Received status ${response.status}`);
+        console.error("Failed to assign chef:", response);
       }
-      await fetchOrders();
-      // Optionally, show a success message to the user
-      // alert("Chef assigned successfully!"); // You can uncomment this if you want a success alert
     } catch (err) {
+      // Catch any network errors or exceptions during the API call or fetchOrders
       setError(`Failed to assign chef: ${err.message}`);
       console.error("Failed to assign chef:", err);
     } finally {
