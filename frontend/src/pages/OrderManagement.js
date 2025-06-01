@@ -71,16 +71,20 @@ function OrderManagement() {
     try {
       const response = await axiosInstance.put(`/api/orders/${orderId}`, {
         status: "served",
-      }); // Use axiosInstance
+      });
       // Update the local state immediately to stop the timer
+      const currentTime = new Date().toISOString();
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId
-            ? { ...order, status: "served", endTime: new Date().toISOString() }
+            ? { ...order, status: "served", endTime: currentTime }
             : order
         )
       );
-      fetchOrders(); // Fetch updated orders to ensure state is fully synced
+      // Fetch orders after a short delay to ensure the local state update is processed
+      setTimeout(() => {
+        fetchOrders();
+      }, 1000);
     } catch (err) {
       setError(`Failed to update order status: ${err.message}`);
       console.error("Failed to update order status:", err);
