@@ -77,12 +77,6 @@ function TableManagement() {
     if (window.confirm("Are you sure you want to delete this table?")) {
       try {
         const response = await axiosInstance.delete(`/api/tables/${id}`); // Use axiosInstance
-        if (!response.ok) {
-          const errorData = response.data;
-          throw new Error(
-            errorData.message || `HTTP error! status: ${response.status}`
-          );
-        }
         // After successful deletion, refetch tables
         fetchTables();
       } catch (err) {
