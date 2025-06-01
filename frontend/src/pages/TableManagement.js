@@ -57,12 +57,6 @@ function TableManagement() {
     e.preventDefault();
     try {
       const response = await axiosInstance.post("/api/tables", newTableData); // Use axiosInstance
-      if (!response.ok) {
-        const errorData = response.data;
-        throw new Error(
-          errorData.message || `HTTP error! status: ${response.status}`
-        );
-      }
       // After successful creation, refetch tables to update the list
       fetchTables();
       // Reset form and hide it
