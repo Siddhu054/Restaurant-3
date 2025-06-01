@@ -4,7 +4,7 @@ import axios from "axios";
 const axiosInstance = axios.create({
   // Replace with the base URL of your backend API
   // Example: 'http://localhost:5000' if your backend runs on port 5000
-  baseURL: "http://localhost:5000", // <-- **Verify this matches your backend URL**
+  baseURL: process.env.REACT_APP_BACKEND_URL,
   timeout: 5000, // Request timeout in milliseconds
   headers: {
     "Content-Type": "application/json",
