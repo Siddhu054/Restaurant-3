@@ -17,7 +17,7 @@ import {
   FaCreditCard,
   FaHistory,
 } from "react-icons/fa";
-import axiosInstance from "./services/axiosInstance";
+import axiosInstance from "./api/axios";
 
 function App() {
   // Assuming dashboardData and orderSummary are still needed for the dashboard, keeping the state and fetch for now
