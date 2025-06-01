@@ -123,22 +123,32 @@ function OrderManagement() {
     try {
       const response = await axiosInstance.put(
         `/api/orders/${orderId}/assign-chef`,
-        { chefId }
+        { chefId },
+        { validateStatus: (status) => status < 500 } // Accept status codes less than 500 as not throwing errors
       ); // Use axiosInstance
-      // Check for successful status codes (e.g., 200 OK, 204 No Content)
+
+      // Now, explicitly check the status for what we consider success
       if (response.status === 200 || response.status === 204) {
-        // Chef assigned successfully, now fetch updated orders
+        // Chef assigned successfully based on status, now fetch updated orders
+        console.log("Chef assigned successfully with status", response.status);
         await fetchOrders();
-        // Optionally, add a success notification here if needed, but avoid setting the error state
+        // Optionally, add a success notification here if needed
       } else {
-        // If backend returns a non-success status, treat it as an error
-        setError(`Failed to assign chef: Received status ${response.status}`);
-        console.error("Failed to assign chef:", response);
+        // Handle cases where status is not a clear success, but also not an Axios error (due to validateStatus)
+        console.error(
+          "Failed to assign chef: Received non-success status",
+          response.status,
+          response.data
+        );
+        setError(
+          `Failed to assign chef: Received status ${response.status}` +
+            (response.data?.message ? `: ${response.data.message}` : "")
+        );
       }
     } catch (err) {
-      // Catch any network errors or exceptions during the API call or fetchOrders
+      // Catch any network errors or exceptions that validateStatus didn't handle (e.g., status 500+ or network issues)
+      console.error("Failed to assign chef: Exception caught", err);
       setError(`Failed to assign chef: ${err.message}`);
-      console.error("Failed to assign chef:", err);
     } finally {
       setAssigning((prev) => ({ ...prev, [orderId]: false }));
     }
