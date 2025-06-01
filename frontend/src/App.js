@@ -17,6 +17,7 @@ import {
   FaCreditCard,
   FaHistory,
 } from "react-icons/fa";
+import axiosInstance from "./services/axiosInstance";
 
 function App() {
   // Assuming dashboardData and orderSummary are still needed for the dashboard, keeping the state and fetch for now
@@ -33,13 +34,8 @@ function App() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/dashboard/summary"
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const json = await response.json();
+        const response = await axiosInstance.get("/api/dashboard/summary");
+        const json = response.data;
         console.log("Fetched data:", json); // Log fetched data
 
         // Defensive check for required fields and map to state
