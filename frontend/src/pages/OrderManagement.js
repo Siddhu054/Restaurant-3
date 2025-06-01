@@ -132,6 +132,8 @@ function OrderManagement() {
         );
       }
       await fetchOrders();
+      // Optionally, show a success message to the user
+      // alert("Chef assigned successfully!"); // You can uncomment this if you want a success alert
     } catch (err) {
       setError(`Failed to assign chef: ${err.message}`);
       console.error("Failed to assign chef:", err);
